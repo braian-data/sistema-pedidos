@@ -1,12 +1,12 @@
 # Credenciais e configurações locais
 .env
 .env.*
+!.env.example
 
 # Arquivos temporários Python
 __pycache__/
 *.pyc
 
-# Ambientes virtuais
-.env
-.env.*
-!.env.example
+# Ambientes virtuais Python
+.venv/
+venv/
