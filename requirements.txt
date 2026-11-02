@@ -1,0 +1,14 @@
+# Framework para construir a API
+fastapi
+
+# Servidor ASGI para executar a aplicação
+uvicorn[standard]
+
+# ORM para trabalhar com banco de dados - equivale DQL e DML
+sqlalchemy
+
+# Driver de conexão com PostgreSQL
+psycopg[binary]
+
+# Gerenciamento de migrações do banco - equivale a DDL
+alembic
