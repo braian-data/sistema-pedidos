@@ -3,6 +3,8 @@ services:
     build: .
     ports:
       - "8000:8000"
+    env_file:
+      - .env # usado pelo compose para substituir variáveis de ambiente no contêiner.
 
 # services — define os serviços que o Compose vai gerenciar.
 # api — nome do serviço da aplicação.

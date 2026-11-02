@@ -1,10 +1,11 @@
-#Imagem leve para reduzir tamanho e tempo de build
 FROM python:3.13-slim
 
-#Pasta onde os próximos comandos do Dockerfile serão executados
-WORKDIR /app 
+WORKDIR /app
 
-#Copia o arquivo de dependências para dentro do container
-# . significa que copiamos o arquivo para a pasta atual do container, que é /app
 COPY requirements.txt .
 
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ./app ./app
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
