@@ -1,7 +1,6 @@
 from .base import Base
 from sqlalchemy import String, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey
 
 class Usuario(Base):
     __tablename__ = "usuarios"
