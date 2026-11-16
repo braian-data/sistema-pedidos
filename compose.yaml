@@ -6,11 +6,6 @@ services:
     env_file:
       - .env # usado pelo compose para substituir variáveis de ambiente no contêiner.
 
-# services — define os serviços que o Compose vai gerenciar.
-# api — nome do serviço da aplicação.
-# build: . — utiliza o Dockerfile da raiz do projeto para construir a imagem.
-# ports — conecta a porta 8000 do Windows à porta 8000 do contêiner.
-
   db:
     image: postgres:17
     environment:
@@ -22,9 +17,3 @@ services:
 
 volumes:
   postgres_data:
-
-# db: nome do serviço PostgreSQL.
-# image: imagem oficial do PostgreSQL.
-# environment: configura usuário, senha e nome do banco.
-# volumes: mantém os dados mesmo quando o contêiner é removido.
-# postgres_data: nome do volume gerenciado pelo Docker.
