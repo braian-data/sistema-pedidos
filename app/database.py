@@ -19,9 +19,8 @@ engine = create_engine(DATABASE_URL)
 
 def testar_conexao():
     try:
-        with engine.connect() as conexao:
-            resultado = conexao.execute(text("SELECT 1"))
-            return resultado.scalar()
-    except Exception as {e}:
-        print(f"Ocorreu um erro na conexão com o db: {e}")
-        
+        with engine.connect() as connection:
+            result = connection.execute(text("SELECT 1"))
+            print("Conexão com o banco de dados bem-sucedida!")
+    except Exception as e:
+        print(f"Erro ao conectar ao banco de dados: {e}")
