@@ -1,10 +1,8 @@
 from .base import Base
-from sqlalchemy import String, CheckConstraint
+from sqlalchemy import String, CheckConstraint, ForeignKey, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey
 from datetime import datetime
 from decimal import Decimal
-from sqlalchemy import Numeric
 
 class Pedido(Base):
     __tablename__ = "pedidos"

@@ -10,7 +10,7 @@ class ItemPedido(Base):
     __table_args__ = (
         CheckConstraint(
             "quantidade > 0",
-            name="quantidade_maior_que_zero"
+            name="ck_item_pedido_quantidade_maior_que_zero"
         ),
         CheckConstraint(
             "valor_unitario >= 0",
