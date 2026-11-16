@@ -1,5 +1,3 @@
-from app.models.pedido import Pedido
-
 from .base import Base
 from sqlalchemy import String, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship

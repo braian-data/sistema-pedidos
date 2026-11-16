@@ -35,3 +35,4 @@ class Pedido(Base):
     cliente: Mapped["Cliente"] = relationship(back_populates="pedidos")
     usuario_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"), nullable=False)
     usuario: Mapped["Usuario"] = relationship(back_populates="pedidos")
+    itens: Mapped[list["ItemPedido"]] = relationship(back_populates="pedido", cascade="all, delete-orphan")
