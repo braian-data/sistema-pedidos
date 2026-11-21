@@ -1,5 +1,8 @@
-from sqlalchemy import create_engine, URL, text
+
 import os
+
+from sqlalchemy import create_engine, URL, text
+from sqlalchemy.orm import sessionmaker, Session
 
 DB_USER = os.environ["POSTGRES_USER"]
 DB_PASSWORD = os.environ["POSTGRES_PASSWORD"]
@@ -17,10 +20,23 @@ DATABASE_URL = URL.create(
 
 engine = create_engine(DATABASE_URL)
 
+SessionLocal = sessionmaker(
+    bind=engine,
+    autoflush=False,
+    autocommit=False,
+)
+
 def testar_conexao():
     try:
         with engine.connect() as connection:
-            result = connection.execute(text("SELECT 1"))
-            print("Conexão com o banco de dados bem-sucedida!")
+            connection.execute(text("SELECT 1"))
+            print("Conexão com banco bem-sucedida!")
     except Exception as e:
-        print(f"Erro ao conectar ao banco de dados: {e}")
+        print(f"Erro ao conectar ao banco: {e}")
+
+def get_db():
+    db: Session = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

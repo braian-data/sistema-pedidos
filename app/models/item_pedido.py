@@ -1,40 +1,26 @@
-from .base import Base
-from sqlalchemy import CheckConstraint, ForeignKey, Numeric
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from decimal import Decimal
+from sqlalchemy import CheckConstraint, ForeignKey, Integer, Numeric
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from .base import Base
 
 
 class ItemPedido(Base):
     __tablename__ = "itens_pedido"
 
     __table_args__ = (
-        CheckConstraint(
-            "quantidade > 0",
-            name="ck_item_pedido_quantidade_maior_que_zero"
-        ),
-        CheckConstraint(
-            "valor_unitario >= 0",
-            name="ck_item_pedido_valor_unitario_nao_negativo"
-        ),
+        CheckConstraint("preco > 0", name="ck_item_pedido_preco_positivo"),
+        CheckConstraint("quantidade > 0", name="ck_item_pedido_quantidade_positiva"),
     )
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    itempedidoid: Mapped[int] = mapped_column(primary_key=True)
+    preco: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
+    quantidade: Mapped[int] = mapped_column(Integer, nullable=False)
 
     pedido_id: Mapped[int] = mapped_column(
-        ForeignKey("pedidos.id"),
-        nullable=False
+        ForeignKey("pedidos.pedidoid"), nullable=False
     )
-
     produto_id: Mapped[int] = mapped_column(
-        ForeignKey("produtos.id"),
-        nullable=False
-    )
-
-    quantidade: Mapped[int] = mapped_column(nullable=False)
-
-    valor_unitario: Mapped[Decimal] = mapped_column(
-        Numeric(10, 2),
-        nullable=False
+        ForeignKey("produtos.produtoid"), nullable=False
     )
 
     pedido: Mapped["Pedido"] = relationship(back_populates="itens")
