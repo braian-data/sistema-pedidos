@@ -12,3 +12,12 @@ psycopg[binary]
 
 # Gerenciamento de migrações do banco - equivale a DDL
 alembic
+
+
+# AUTENTICAÇÃO VIA HASH/TOKENS
+
+python-multipart
+
+pyjwt
+
+pwdlib[argon2]

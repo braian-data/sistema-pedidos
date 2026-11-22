@@ -11,6 +11,7 @@ from app.crud.estoque import (
     update_estoque,
 )
 from app.database import get_db
+from app.dependencies import exigir_perfil
 from app.schemas.estoque import (
     EstoqueCreate,
     EstoqueResponse,
@@ -19,8 +20,15 @@ from app.schemas.estoque import (
 
 router = APIRouter(prefix="/estoques", tags=["estoques"])
 
+ESCRITA = Depends(exigir_perfil("admin", "gestor", "estoquista"))
 
-@router.post("/", response_model=EstoqueResponse, status_code=status.HTTP_201_CREATED)
+
+@router.post(
+    "/",
+    response_model=EstoqueResponse,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[ESCRITA],
+)
 def criar_estoque(
     estoque_in: EstoqueCreate,
     db: Session = Depends(get_db),
@@ -66,7 +74,11 @@ def obter_estoque(
     return estoque
 
 
-@router.patch("/{estoque_id}", response_model=EstoqueResponse)
+@router.patch(
+    "/{estoque_id}",
+    response_model=EstoqueResponse,
+    dependencies=[ESCRITA],
+)
 def atualizar_estoque(
     estoque_id: int,
     estoque_in: EstoqueUpdate,
@@ -90,7 +102,11 @@ def atualizar_estoque(
         )
 
 
-@router.delete("/{estoque_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{estoque_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[ESCRITA],
+)
 def remover_estoque(
     estoque_id: int,
     db: Session = Depends(get_db),
