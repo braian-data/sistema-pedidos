@@ -11,6 +11,7 @@ from app.crud.produto import (
     update_produto,
 )
 from app.database import get_db
+from app.dependencies import exigir_perfil
 from app.schemas.produto import (
     ProdutoCreate,
     ProdutoResponse,
@@ -19,8 +20,15 @@ from app.schemas.produto import (
 
 router = APIRouter(prefix="/produtos", tags=["produtos"])
 
+ESCRITA = Depends(exigir_perfil("admin", "gestor", "estoquista"))
 
-@router.post("/", response_model=ProdutoResponse, status_code=status.HTTP_201_CREATED)
+
+@router.post(
+    "/",
+    response_model=ProdutoResponse,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[ESCRITA],
+)
 def criar_produto(
     produto_in: ProdutoCreate,
     db: Session = Depends(get_db),
@@ -66,7 +74,11 @@ def obter_produto(
     return produto
 
 
-@router.patch("/{produto_id}", response_model=ProdutoResponse)
+@router.patch(
+    "/{produto_id}",
+    response_model=ProdutoResponse,
+    dependencies=[ESCRITA],
+)
 def atualizar_produto(
     produto_id: int,
     produto_in: ProdutoUpdate,
@@ -90,7 +102,11 @@ def atualizar_produto(
         )
 
 
-@router.delete("/{produto_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{produto_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[ESCRITA],
+)
 def remover_produto(
     produto_id: int,
     db: Session = Depends(get_db),
@@ -106,6 +122,7 @@ def remover_produto(
     try:
         delete_produto(db, produto)
     except IntegrityError:
+        db.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Produto possui estoque ou pedidos vinculados.",
