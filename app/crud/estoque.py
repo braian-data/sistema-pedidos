@@ -11,6 +11,9 @@ def list_estoques(db: Session, skip: int = 0, limit: int = 100) -> list[Estoque]
     stmt = select(Estoque).offset(skip).limit(limit)
     return list(db.scalars(stmt).all())
 
+def get_estoque_by_produto_id(db: Session, produto_id: int) -> Estoque | None:
+    return db.scalar(select(Estoque).where(Estoque.produto_id == produto_id))
+
 def create_estoque(db: Session, estoque_in: EstoqueCreate) -> Estoque:
     estoque = Estoque(**estoque_in.model_dump())
     db.add(estoque)

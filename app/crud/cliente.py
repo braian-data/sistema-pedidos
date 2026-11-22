@@ -21,6 +21,8 @@ def create_cliente(db: Session, cliente_in: ClienteCreate) -> Cliente:
     db.refresh(cliente)
     return cliente
 
+def get_cliente_by_nome(db: Session, nome: str) -> Cliente | None:
+    return db.scalar(select(Cliente).where(Cliente.nome == nome))
 
 def update_cliente(
     db: Session,
