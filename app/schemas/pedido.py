@@ -6,24 +6,25 @@ from pydantic import BaseModel, ConfigDict, Field
 StatusPedido = Literal["pendente", "confirmado", "entregue", "cancelado"]
 
 
+class ItemPedidoEntrada(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    produto_id: int = Field(..., gt=0)
+    quantidade: int = Field(..., gt=0)
+
+
 class PedidoCreate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
-    data: datetime
-    status: StatusPedido = "pendente"
-    valor_total: Decimal = Field(..., ge=0, decimal_places=2)
     cliente_id: int = Field(..., gt=0)
     usuario_id: int = Field(..., gt=0)
+    itens: list[ItemPedidoEntrada] = Field(..., min_length=1)
 
 
 class PedidoUpdate(BaseModel):
-    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+    model_config = ConfigDict(extra="forbid")
 
-    data: datetime | None = None
-    status: StatusPedido | None = None
-    valor_total: Decimal | None = Field(default=None, ge=0, decimal_places=2)
-    cliente_id: int | None = Field(default=None, gt=0)
-    usuario_id: int | None = Field(default=None, gt=0)
+    status: StatusPedido
 
 
 class PedidoResponse(BaseModel):

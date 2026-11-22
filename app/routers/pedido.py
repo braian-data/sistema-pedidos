@@ -7,9 +7,10 @@ from app.crud.pedido import (
     delete_pedido,
     get_pedido,
     list_pedidos,
-    update_pedido,
+    update_pedido_status,
 )
 from app.database import get_db
+from app.exceptions import NaoEncontradoError, RegraNegocioError
 from app.schemas.pedido import (
     PedidoCreate,
     PedidoResponse,
@@ -26,6 +27,10 @@ def criar_pedido(
 ):
     try:
         return create_pedido(db, pedido_in)
+    except NaoEncontradoError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except RegraNegocioError as e:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
     except IntegrityError as e:
         db.rollback()
         raise HTTPException(
@@ -74,7 +79,9 @@ def atualizar_pedido(
         )
 
     try:
-        return update_pedido(db, pedido, pedido_in)
+        return update_pedido_status(db, pedido, pedido_in.status)
+    except RegraNegocioError as e:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
     except IntegrityError:
         db.rollback()
         raise HTTPException(
@@ -96,4 +103,7 @@ def remover_pedido(
             detail="Pedido não encontrado.",
         )
 
-    delete_pedido(db, pedido)
+    try:
+        delete_pedido(db, pedido)
+    except RegraNegocioError as e:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
