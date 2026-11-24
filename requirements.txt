@@ -21,3 +21,6 @@ python-multipart
 pyjwt
 
 pwdlib[argon2]
+
+pytest
+httpx
