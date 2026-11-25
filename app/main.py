@@ -31,3 +31,6 @@ app.include_router(item_pedido_router, dependencies=[Depends(get_current_user)])
 @app.get("/")
 def home():
     return {"mensagem": "API funcionando!"}
+@app.get("/health")
+def health():
+    return {"status": "ok"}

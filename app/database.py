@@ -1,23 +1,32 @@
-
 import os
 
 from sqlalchemy import create_engine, URL, text
+from sqlalchemy.engine import make_url
 from sqlalchemy.orm import sessionmaker, Session
 
-DB_USER = os.environ["POSTGRES_USER"]
-DB_PASSWORD = os.environ["POSTGRES_PASSWORD"]
-DB_NAME = os.environ["POSTGRES_DB"]
-DB_HOST = os.getenv("DB_HOST", "db")
-DB_PORT = int(os.getenv("DB_PORT", "5432"))
 
-DATABASE_URL = URL.create(
-    drivername="postgresql+psycopg",
-    username=DB_USER,
-    password=DB_PASSWORD,
-    host=DB_HOST,
-    port=DB_PORT,
-    database=DB_NAME,
-)
+def montar_url() -> URL:
+    url = os.getenv("DATABASE_URL")
+    if url:
+        # Provedores entregam "postgres://" ou "postgresql://";
+        # o SQLAlchemy precisa do nome do driver (psycopg) no prefixo.
+        for prefixo in ("postgres://", "postgresql://"):
+            if url.startswith(prefixo):
+                url = "postgresql+psycopg://" + url[len(prefixo):]
+                break
+        return make_url(url)
+
+    return URL.create(
+        drivername="postgresql+psycopg",
+        username=os.environ["POSTGRES_USER"],
+        password=os.environ["POSTGRES_PASSWORD"],
+        host=os.getenv("DB_HOST", "db"),
+        port=int(os.getenv("DB_PORT", "5432")),
+        database=os.environ["POSTGRES_DB"],
+    )
+
+
+DATABASE_URL = montar_url()
 
 engine = create_engine(DATABASE_URL)
 
