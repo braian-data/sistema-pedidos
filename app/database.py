@@ -8,13 +8,14 @@ DB_USER = os.environ["POSTGRES_USER"]
 DB_PASSWORD = os.environ["POSTGRES_PASSWORD"]
 DB_NAME = os.environ["POSTGRES_DB"]
 DB_HOST = os.getenv("DB_HOST", "db")
+DB_PORT = int(os.getenv("DB_PORT", "5432"))
 
 DATABASE_URL = URL.create(
     drivername="postgresql+psycopg",
     username=DB_USER,
     password=DB_PASSWORD,
     host=DB_HOST,
-    port=5432,
+    port=DB_PORT,
     database=DB_NAME,
 )
 
