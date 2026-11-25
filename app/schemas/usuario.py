@@ -12,6 +12,13 @@ class UsuarioCreate(BaseModel):
     senha: str = Field(..., min_length=6)
     perfil: PerfilType
 
+class UsuarioRegistro(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    nome: str = Field(..., min_length=1, max_length=100)
+    email: str = Field(..., min_length=1, max_length=100)
+    senha: str = Field(..., min_length=6)
+
 
 class UsuarioUpdate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
@@ -29,3 +36,4 @@ class UsuarioResponse(BaseModel):
     nome: str
     email: str
     perfil: PerfilType
+
