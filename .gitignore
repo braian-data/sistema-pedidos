@@ -10,3 +10,6 @@ __pycache__/
 # Ambientes virtuais Python
 .venv/
 venv/
+
+.venv/
+.pytest_cache/
